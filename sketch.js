@@ -10,15 +10,13 @@ let outputImgData;
 
 function setup() {
   createCanvas(252, 252);
-  net = new p5ml.TransformNet(modelLoaded, 'udnie', 'models/udnie/');
+  net = new p5ml.TransformNet(modelLoaded, 'wave', 'models/wave/');
 }
 
 // A function to be called when the model has been loaded
 function modelLoaded() {
-  console.log('Model loaded!');
-
   // Set style for the model
-  net.setStyle('udnie');
+  net.setStyle('wave');
 
   inputImg = select('#input-img').elt;
 
