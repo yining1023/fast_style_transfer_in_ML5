@@ -81,3 +81,30 @@ body {
         width: 100%;
     }
   }
+
+  #bookmarkflag {    
+    font-family: Roboto,"Helvetica Neue",sans-serif;
+    position: absolute;
+    right: -264px;
+    width: 500px;
+    top: -133px;
+    font-size: 12px;
+    background: blueviolet;
+    padding: 200px 0 9px;
+    color: #fff;
+    font-weight:bold;
+    text-decoration:none;
+    text-align: center;
+    vertical-align: bottom;
+    box-shadow: 0 0 11px 0 rgba(0,0,0,.75);
+    font-transform: capitalize;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+  #bookmarkflag:hover {
+    text-decoration:underline;
+  }
+  #bookmarkflag .bookmarklink {
+    line-height: 15px;
+    font-weight: 900;
+  }
