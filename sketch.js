@@ -5,10 +5,11 @@ Fast Style Transfer Simple Example
 */
 
 let nets = {};
-let modelNames = ['wave', 'la_muse', 'rain_princess', 'udnie', 'wreck', 'scream'];
+let modelNames = ['la_muse', 'rain_princess', 'udnie', 'wreck', 'scream', 'wave'];
 let inputImg, styleImg;
 let outputImgData;
 let outputImg;
+let isLoading = true;
 
 function setup() {
   createCanvas(252, 252).parent('canvasContainer');;
@@ -17,6 +18,8 @@ function setup() {
   modelNames.forEach(n => {
     nets[n] = new p5ml.TransformNet('models/' + n + '/', modelLoaded);
   });
+  textSize(32);
+  textAlign(CENTER);
 }
 
 // A function to be called when the model has been loaded
@@ -32,8 +35,15 @@ function predictImg(modelName) {
   outputImgData = nets[modelName].predict(inputImg);
   // Convert the Array3D with image data to a p5.Image
   outputImg = array3DToP5Image(outputImgData);
+  isLoading = false;
   // Draw the p5.Image on the canvas
   image(outputImg, 0, 0);
+}
+
+function draw() {
+  if (isLoading) {
+    text('Loading...', width / 2, height / 2)
+  }
 }
 
 /**
@@ -62,7 +72,6 @@ function array3DToP5Image(imgData) {
 }
 
 function updateStyleImg(ele) {
-  if (ele.src) {
-    styleImg.src = ele.src;
-  }
+  if (ele.src) styleImg.src = ele.src;
+  if (ele.id) predictImg(ele.id);
 }
