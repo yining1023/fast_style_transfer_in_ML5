@@ -6,13 +6,14 @@ Fast Style Transfer Simple Example
 
 let nets = {};
 let modelNames = ['wave', 'la_muse', 'rain_princess', 'udnie', 'wreck', 'scream'];
-let inputImg;
+let inputImg, styleImg;
 let outputImgData;
 let outputImg;
 
 function setup() {
-  createCanvas(252, 252);
+  createCanvas(252, 252).parent('canvasContainer');;
   inputImg = select('#input-img').elt;
+  styleImg = select('#style-img').elt;
   modelNames.forEach(n => {
     nets[n] = new p5ml.TransformNet('models/' + n + '/', modelLoaded);
   });
@@ -58,4 +59,10 @@ function array3DToP5Image(imgData) {
   }
   outputImg.updatePixels();
   return outputImg;
+}
+
+function updateStyleImg(ele) {
+  if (ele.src) {
+    styleImg.src = ele.src;
+  }
 }
