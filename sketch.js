@@ -4,44 +4,58 @@ Fast Style Transfer Simple Example
 ===
 */
 
-let net;
+let nets = {};
+let modelNames = ['wave', 'la_muse', 'rain_princess', 'udnie', 'wreck', 'scream'];
 let inputImg;
 let outputImgData;
+let outputImg;
 
 function setup() {
   createCanvas(252, 252);
-  net = new p5ml.TransformNet(modelLoaded, 'wave', 'models/wave/');
+  inputImg = select('#input-img').elt;
+  modelNames.forEach(n => {
+    nets[n] = new p5ml.TransformNet('models/' + n + '/', modelLoaded);
+  });
 }
 
 // A function to be called when the model has been loaded
 function modelLoaded() {
-  // Set style for the model
-  net.setStyle('wave');
+  if (nets['wave']) predictImg('wave');
+}
 
-  inputImg = select('#input-img').elt;
-
+function predictImg(modelName) {
   /**
   * @param inputImg HTMLImageElement of input img
   * @return Array3D containing pixels of output img
   */
-  outputImgData = net.predict(inputImg);
-
-  // Show the img on the canvas
-  renderToCanvas(outputImgData);
+  outputImgData = nets[modelName].predict(inputImg);
+  // Convert the Array3D with image data to a p5.Image
+  outputImg = array3DToP5Image(outputImgData);
+  // Draw the p5.Image on the canvas
+  image(outputImg, 0, 0);
 }
 
-function renderToCanvas(outputImgData) {
-  const data = outputImgData.dataSync();
+/**
+* @param imgData Array3D containing pixels of a img
+* @return p5 Image
+*/
+function array3DToP5Image(imgData) {  
+  const imgWidth = imgData.shape[0];
+  const imgHeight = imgData.shape[1];
+  const data = imgData.dataSync();
+  const outputImg = createImage(imgWidth, imgHeight);
+  outputImg.loadPixels();
   let k = 0;
-  for (let i = 0; i < width; i++) {
-    for (let j = 0; j < height; j++) {
+  for (let i = 0; i < outputImg.width; i++) {
+    for (let j = 0; j < outputImg.height; j++) {
       k = (i + j * height) * 3;
-      let r = Math.round(255 * data[k + 0]);
-      let g = Math.round(255 * data[k + 1]);
-      let b = Math.round(255 * data[k + 2]);
+      let r = floor(256 * data[k + 0]);
+      let g = floor(256 * data[k + 1]);
+      let b = floor(256 * data[k + 2]);
       let c = color(r, g, b);
-      set(i, j, c);
+      outputImg.set(i, j, c);
     }
   }
-  updatePixels();
+  outputImg.updatePixels();
+  return outputImg;
 }
