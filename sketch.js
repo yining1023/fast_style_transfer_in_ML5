@@ -79,3 +79,8 @@ function updateStyleImg(ele) {
   if (ele.src) styleImg.src = ele.src;
   if (ele.id) predictImg(ele.id);
 }
+
+function updateInputImg(ele) {
+  if (ele.src) inputImg.src = ele.src;
+  if (ele.id) predictImg(ele.id);
+}
