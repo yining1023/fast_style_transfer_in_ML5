@@ -12,6 +12,7 @@ let outputImg;
 let isLoading = true;
 let modelNum = 0;
 let currentModel = 'wave';
+let uploader;
 
 function setup() {
   createCanvas(252, 252).parent('canvasContainer');;
@@ -23,6 +24,10 @@ function setup() {
   textSize(32);
   textAlign(CENTER);
   fill('#767676');
+
+  // Image uploader
+  uploader = select('#uploader').elt;
+  uploader.addEventListener('change', gotNewInputImg);
 }
 
 // A function to be called when the model has been loaded
@@ -82,12 +87,31 @@ function updateStyleImg(ele) {
     styleImg.src = ele.src;
     currentModel = ele.id;
   }
-  if (currentModel) predictImg(currentModel);
+  if (currentModel) {
+    isLoading = true;
+    predictImg(currentModel);
+  }
 }
 
 function updateInputImg(ele) {
   if (ele.src) inputImg.src = ele.src;
-  console.log('styleImg: ', styleImg);
-  console.log('currentModel: ', currentModel);
+  isLoading = true;
+  predictImg(currentModel);
+}
+
+function uploadImg() {
+  uploader.click();
+}
+
+function gotNewInputImg() {
+  if (uploader.files && uploader.files[0]) {
+    let newImgUrl = window.URL.createObjectURL(uploader.files[0]);
+    inputImg.src = newImgUrl;
+    inputImg.style.width = '250px';
+    inputImg.style.height = '250px';
+  }
+}
+
+function onPredictClick() {
   predictImg(currentModel);
 }
