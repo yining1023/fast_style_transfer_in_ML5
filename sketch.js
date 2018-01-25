@@ -1,6 +1,6 @@
 /*
 ===
-Fast Style Transfer Simple Example
+Fast Style Transfer Simple Demo
 ===
 */
 
@@ -10,6 +10,7 @@ let inputImg, styleImg;
 let outputImgData;
 let outputImg;
 let isLoading = true;
+let modelNum = 0;
 
 function setup() {
   createCanvas(252, 252).parent('canvasContainer');;
@@ -24,7 +25,10 @@ function setup() {
 
 // A function to be called when the model has been loaded
 function modelLoaded() {
-  if (nets['wave']) predictImg('wave');
+  modelNum++;
+  if (modelNum >= modelNames.length) {
+    predictImg('wave');
+  }
 }
 
 function predictImg(modelName) {
