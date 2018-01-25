@@ -11,6 +11,7 @@ let outputImgData;
 let outputImg;
 let isLoading = true;
 let modelNum = 0;
+let currentModel = 'wave';
 
 function setup() {
   createCanvas(252, 252).parent('canvasContainer');;
@@ -21,13 +22,14 @@ function setup() {
   });
   textSize(32);
   textAlign(CENTER);
+  fill('#767676');
 }
 
 // A function to be called when the model has been loaded
 function modelLoaded() {
   modelNum++;
   if (modelNum >= modelNames.length) {
-    predictImg('wave');
+    predictImg(currentModel);
   }
 }
 
@@ -76,11 +78,16 @@ function array3DToP5Image(imgData) {
 }
 
 function updateStyleImg(ele) {
-  if (ele.src) styleImg.src = ele.src;
-  if (ele.id) predictImg(ele.id);
+  if (ele.src) {
+    styleImg.src = ele.src;
+    currentModel = ele.id;
+  }
+  if (currentModel) predictImg(currentModel);
 }
 
 function updateInputImg(ele) {
   if (ele.src) inputImg.src = ele.src;
-  if (ele.id) predictImg(ele.id);
+  console.log('styleImg: ', styleImg);
+  console.log('currentModel: ', currentModel);
+  predictImg(currentModel);
 }
