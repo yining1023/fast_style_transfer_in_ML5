@@ -3,12 +3,6 @@ body {
   background: #eee;
   color: #767676;
 }
-#output {
-  height: 300px;
-  max-width: 300px;
-  background: lightgray;
-  margin-bottom: 15px;
-}
 .output-container {
   min-width: 330px;
   padding-bottom: 35px !important;
@@ -147,4 +141,8 @@ input[type="file"] {
 .start-btn:hover {
   background: rgb(43, 144, 226);
   color: white;
+}
+#output-img-container {
+  display: flex;
+  justify-content: center;
 }

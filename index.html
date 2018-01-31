@@ -65,7 +65,7 @@
     <div class="style-container">
       <input id="uploader" name="inputImgFile" type="file" accept="image/*">
       <div class="link" onclick="uploadImg()">Upload an image</div>
-      <!-- <div class="link">Use my webcam</div> -->
+      <div class="link" onclick="useWebcam()">Use my webcam</div>
     </div>
     <div class="style-container">
       <button class="start-btn" onclick="onPredictClick()">START</button>
@@ -115,7 +115,7 @@
 
   <div class="white-box output-container col-3">
     <h3 class="title">OUTPUT</h3>
-    <div id="canvasContainer" class="center-container"></div>
+    <div id="output-img-container"></div>
   </div>
 
   </div>
