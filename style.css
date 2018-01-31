@@ -146,3 +146,10 @@ input[type="file"] {
   display: flex;
   justify-content: center;
 }
+.reverse-img {
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+.note {
+  font-size: 12px;
+}

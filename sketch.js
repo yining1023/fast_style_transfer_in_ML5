@@ -46,14 +46,12 @@ function modelLoaded() {
 }
 
 function predictImg(modelName) {
-  console.log('webcam: ', webcam);
   if (!modelReady) return;
   if (webcam && video) {
     outputImgData = nets[modelName].predict(video.elt);
   } else if (inputImg) {
     outputImgData = nets[modelName].predict(inputImg);
   }
-  console.log('outputImgData: ', outputImgData);
   outputImg = p5ml.array3DToImage(outputImgData);
   outputImgContainer.elt.src = outputImg.src;
 }
@@ -103,11 +101,13 @@ function useWebcam() {
   }
   webcam = true;
   select('#input-img').hide();
-  console.log('video: ', video);
+  outputImgContainer.addClass('reverse-img');
 }
 
 function deactiveWebcam() {
+  start = false;
   select('#input-img').show();
+  outputImgContainer.removeClass('reverse-img');
   webcam = false;
   if (video) {
     video.hide();
@@ -116,7 +116,7 @@ function deactiveWebcam() {
 }
 
 function onPredictClick() {
-  start = true;
+  if (webcam) start = true;
   predictImg(currentModel);
 }
 

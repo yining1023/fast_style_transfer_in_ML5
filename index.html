@@ -24,8 +24,9 @@
   
   <div class="input-container white-box col-3">
     <h3 class="title">INPUT</h3>
-    <div class="center-container" id="input-source">
+    <div class="center-container">
       <img id="input-img" src='images/girlwithpearl.jpg'/>
+      <div id="input-source" class="reverse-img"></div>
     </div>
 
     <div class="style-container">
@@ -68,7 +69,13 @@
       <div class="link" onclick="useWebcam()">Use my webcam</div>
     </div>
     <div class="style-container">
-      <button class="start-btn" onclick="onPredictClick()">START</button>
+      <button class="start-btn" onclick="onPredictClick()">Transfer My Image / Video</button>
+    </div>
+    <div class="style-container">
+      <div class="note">
+        Click this button to start transfering your own image or video.<br>
+        If you are using webcam, you might need to wait for 3s / frame.
+      </div>
     </div>
   </div>
 
