@@ -13,11 +13,16 @@ let modelNum = 0;
 let currentModel = 'wave';
 let uploader;
 let webcam = false;
+let modelReady = false;
+let video;
+let start = false;
 
 function setup() {
   noCanvas();
   inputImg = select('#input-img').elt;
   styleImg = select('#style-img').elt;
+
+  // load models
   modelNames.forEach(n => {
     nets[n] = new p5ml.TransformNet('models/' + n + '/', modelLoaded);
   });
@@ -26,6 +31,7 @@ function setup() {
   uploader = select('#uploader').elt;
   uploader.addEventListener('change', gotNewInputImg);
 
+  // output img container
   outputImgContainer = createImg('images/wave.jpg', 'image');
   outputImgContainer.parent('output-img-container');
 }
@@ -34,17 +40,85 @@ function setup() {
 function modelLoaded() {
   modelNum++;
   if (modelNum >= modelNames.length) {
+    modelReady = true;
     predictImg(currentModel);
   }
 }
 
 function predictImg(modelName) {
-  outputImgData = nets[modelName].predict(inputImg);
+  console.log('webcam: ', webcam);
+  if (!modelReady) return;
+  if (webcam && video) {
+    outputImgData = nets[modelName].predict(video.elt);
+  } else if (inputImg) {
+    outputImgData = nets[modelName].predict(inputImg);
+  }
+  console.log('outputImgData: ', outputImgData);
   outputImg = p5ml.array3DToImage(outputImgData);
   outputImgContainer.elt.src = outputImg.src;
 }
 
-function draw() {}
+function draw() {
+  if (modelReady && webcam && video && video.elt && start) {
+    predictImg(currentModel);
+  }
+}
+
+function updateStyleImg(ele) {
+  if (ele.src) {
+    styleImg.src = ele.src;
+    currentModel = ele.id;
+  }
+  if (currentModel) {
+    predictImg(currentModel);
+  }
+}
+
+function updateInputImg(ele) {
+  deactiveWebcam();
+  if (ele.src) inputImg.src = ele.src;
+  predictImg(currentModel);
+}
+
+function uploadImg() {
+  uploader.click();
+  deactiveWebcam();
+}
+
+function gotNewInputImg() {
+  if (uploader.files && uploader.files[0]) {
+    let newImgUrl = window.URL.createObjectURL(uploader.files[0]);
+    inputImg.src = newImgUrl;
+    inputImg.style.width = '250px';
+    inputImg.style.height = '250px';
+  }
+}
+
+function useWebcam() {
+  if (!video) {
+    // webcam video
+    video = createCapture(VIDEO);
+    video.size(250, 250);
+    video.parent('input-source');
+  }
+  webcam = true;
+  select('#input-img').hide();
+  console.log('video: ', video);
+}
+
+function deactiveWebcam() {
+  select('#input-img').show();
+  webcam = false;
+  if (video) {
+    video.hide();
+    video = '';
+  }
+}
+
+function onPredictClick() {
+  start = true;
+  predictImg(currentModel);
+}
 
 /**
 * @param imgData Array3D containing pixels of a img
@@ -70,39 +144,3 @@ function draw() {}
 //   outputImg.updatePixels();
 //   return outputImg;
 // }
-
-function updateStyleImg(ele) {
-  if (ele.src) {
-    styleImg.src = ele.src;
-    currentModel = ele.id;
-  }
-  if (currentModel) {
-    predictImg(currentModel);
-  }
-}
-
-function updateInputImg(ele) {
-  if (ele.src) inputImg.src = ele.src;
-  predictImg(currentModel);
-}
-
-function uploadImg() {
-  uploader.click();
-}
-
-function gotNewInputImg() {
-  if (uploader.files && uploader.files[0]) {
-    let newImgUrl = window.URL.createObjectURL(uploader.files[0]);
-    inputImg.src = newImgUrl;
-    inputImg.style.width = '250px';
-    inputImg.style.height = '250px';
-  }
-}
-
-function useWebcam() {
-  webcam = true;
-}
-
-function onPredictClick() {
-  predictImg(currentModel);
-}
