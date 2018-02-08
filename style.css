@@ -137,6 +137,7 @@ input[type="file"] {
   font-size: 18px;
   padding: 9px 0;
   cursor: pointer;
+  background: white;
 }
 .start-btn:hover {
   background: rgb(43, 144, 226);

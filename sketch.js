@@ -16,6 +16,7 @@ let webcam = false;
 let modelReady = false;
 let video;
 let start = false;
+let isLoading = true;
 
 function setup() {
   noCanvas();
@@ -34,6 +35,8 @@ function setup() {
   // output img container
   outputImgContainer = createImg('images/wave.jpg', 'image');
   outputImgContainer.parent('output-img-container');
+
+  allowForefoxGetCamera();
 }
 
 // A function to be called when the model has been loaded
@@ -46,6 +49,8 @@ function modelLoaded() {
 }
 
 function predictImg(modelName) {
+  isLoading = true;
+  outputImgContainer.elt.src = 'images/loading.gif';
   if (!modelReady) return;
   if (webcam && video) {
     outputImgData = nets[modelName].predict(video.elt);
@@ -54,6 +59,7 @@ function predictImg(modelName) {
   }
   outputImg = ml5.array3DToImage(outputImgData);
   outputImgContainer.elt.src = outputImg.src;
+  isLoading = false;
 }
 
 function draw() {
@@ -118,6 +124,10 @@ function deactiveWebcam() {
 function onPredictClick() {
   if (webcam) start = true;
   predictImg(currentModel);
+}
+
+function allowForefoxGetCamera() {
+  navigator.getUserMedia = ( navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
 }
 
 /**
