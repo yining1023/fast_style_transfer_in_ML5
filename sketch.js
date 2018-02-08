@@ -17,8 +17,12 @@ let modelReady = false;
 let video;
 let start = false;
 let isLoading = true;
+let isSafa = false;
 
 function setup() {
+  isSafa = isSafari();
+  if (isSafa) alert('Sorry we do not yet support your device, please open this page with Chrome on a desktop. We will support other devices in the near future!');
+
   noCanvas();
   inputImg = select('#input-img').elt;
   styleImg = select('#style-img').elt;
@@ -35,8 +39,9 @@ function setup() {
   // output img container
   outputImgContainer = createImg('images/wave.jpg', 'image');
   outputImgContainer.parent('output-img-container');
+  outputImgContainer.elt.src = 'images/loading.gif';
 
-  allowForefoxGetCamera();
+  allowFirefoxGetCamera();
 }
 
 // A function to be called when the model has been loaded
@@ -126,8 +131,19 @@ function onPredictClick() {
   predictImg(currentModel);
 }
 
-function allowForefoxGetCamera() {
+function allowFirefoxGetCamera() {
   navigator.getUserMedia = ( navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
+}
+
+function isSafari() {
+  var ua = navigator.userAgent.toLowerCase();
+  if (ua.indexOf('safari') != -1) {
+    if (ua.indexOf('chrome') > -1) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 }
 
 /**
