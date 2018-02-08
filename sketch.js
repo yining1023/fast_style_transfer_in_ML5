@@ -24,7 +24,7 @@ function setup() {
 
   // load models
   modelNames.forEach(n => {
-    nets[n] = new p5ml.TransformNet('models/' + n + '/', modelLoaded);
+    nets[n] = new ml5.TransformNet('models/' + n + '/', modelLoaded);
   });
 
   // Image uploader
@@ -52,7 +52,7 @@ function predictImg(modelName) {
   } else if (inputImg) {
     outputImgData = nets[modelName].predict(inputImg);
   }
-  outputImg = p5ml.array3DToImage(outputImgData);
+  outputImg = ml5.array3DToImage(outputImgData);
   outputImgContainer.elt.src = outputImg.src;
 }
 
