@@ -37,9 +37,8 @@ function setup() {
   uploader.addEventListener('change', gotNewInputImg);
 
   // output img container
-  outputImgContainer = createImg('images/wave.jpg', 'image');
+  outputImgContainer = createImg('images/loading.gif', 'image');
   outputImgContainer.parent('output-img-container');
-  outputImgContainer.elt.src = 'images/loading.gif';
 
   allowFirefoxGetCamera();
 }
@@ -55,7 +54,6 @@ function modelLoaded() {
 
 function predictImg(modelName) {
   isLoading = true;
-  outputImgContainer.elt.src = 'images/loading.gif';
   if (!modelReady) return;
   if (webcam && video) {
     outputImgData = nets[modelName].predict(video.elt);
